@@ -136,10 +136,10 @@ function applyCloak(c) {
 
 cloakBtn.addEventListener("click", (e) => {
   e.stopPropagation();
-  cloakPanel.classList.toggle("open");
+  cloakPanel.style.display = cloakPanel.style.display === "none" ? "block" : "none";
 });
 
-document.addEventListener("click", () => cloakPanel.classList.remove("open"));
+document.addEventListener("click", () => { cloakPanel.style.display = "none"; });
 cloakPanel.addEventListener("click", e => e.stopPropagation());
 
 // ── Init ─────────────────────────────────────────────────────────────────────
