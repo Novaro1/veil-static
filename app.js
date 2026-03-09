@@ -1,46 +1,83 @@
+const CDN = "https://cdn.jsdelivr.net/gh/gn-math/html@main/";
+
 // ── Games list ─────────────────────────────────────────────────────────────
+// Local = self-hosted in /games/  |  CDN = served via jsDelivr from gn-math/html
 const GAMES = [
-  { name: "Slope",            emoji: "🎳", hue: 120, url: "https://slope-game.github.io/" },
-  { name: "1v1.LOL",          emoji: "🔫", hue: 30,  url: "https://1v1.lol/" },
-  { name: "Krunker",          emoji: "🎯", hue: 200, url: "https://krunker.io/" },
-  { name: "Smash Karts",      emoji: "🏎️", hue: 15,  url: "https://smashkarts.io/" },
-  { name: "Shell Shockers",   emoji: "🥚", hue: 45,  url: "https://shellshock.io/" },
-  { name: "Paper.io 2",       emoji: "📄", hue: 280, url: "https://paper-io.com/" },
-  { name: "Slither.io",       emoji: "🐍", hue: 90,  url: "https://slither.io/" },
-  { name: "Agar.io",          emoji: "🟢", hue: 150, url: "https://agar.io/" },
-  { name: "Cookie Clicker",   emoji: "🍪", hue: 35,  url: "https://orteil.dashnet.org/cookieclicker/" },
-  { name: "2048",             emoji: "🔢", hue: 40,  url: "https://play2048.co/" },
-  { name: "Minesweeper",      emoji: "💣", hue: 0,   url: "https://minesweeper.online/" },
-  { name: "Minecraft Classic",emoji: "⛏️", hue: 100, url: "https://classic.minecraft.net/" },
-  { name: "Retro Bowl",       emoji: "🏈", hue: 40,  url: "https://retrobowl.me/" },
-  { name: "Bloxorz",          emoji: "🟦", hue: 210, url: "https://bloxorz.io/" },
-  { name: "Run 3",            emoji: "🏃", hue: 60,  url: "https://run3.io/" },
-  { name: "Drift Boss",       emoji: "🚗", hue: 350, url: "https://driftboss.io/" },
-  { name: "Vex 5",            emoji: "🤸", hue: 180, url: "https://vex5.io/" },
-  { name: "Geometry Dash",    emoji: "🔺", hue: 25,  url: "https://geometrydash.io/" },
-  { name: "Tunnel Rush",      emoji: "🔮", hue: 290, url: "https://tunnelrush.io/" },
-  { name: "Stickman Hook",    emoji: "🕹️", hue: 330, url: "https://stickmanhook.com/" },
-  { name: "Rocket League",    emoji: "🚀", hue: 220, url: "https://www.crazygames.com/game/rocket-league-sideswipe" },
-  { name: "Chess",            emoji: "♟️", hue: 0,   url: "https://www.chess.com/play/computer" },
-  { name: "Wordle",           emoji: "🟩", hue: 130, url: "https://www.nytimes.com/games/wordle/index.html" },
-  { name: "Sudoku",           emoji: "🔣", hue: 240, url: "https://sudoku.com/" },
-  { name: "Flappy Bird",      emoji: "🐦", hue: 60,  url: "https://flappybird.io/" },
-  { name: "Dino Run",         emoji: "🦕", hue: 80,  url: "https://chromedino.com/" },
-  { name: "Snake",            emoji: "🐍", hue: 110, url: "https://playsnake.org/" },
-  { name: "Tetris",           emoji: "🟥", hue: 0,   url: "https://tetris.com/play-tetris" },
-  { name: "Pong",             emoji: "🏓", hue: 200, url: "https://www.ponggame.org/" },
-  { name: "Among Us Online",  emoji: "👾", hue: 270, url: "https://www.crazygames.com/game/among-us-online" },
+  // ── Action / Shooting ──────────────────────────────────────────────────
+  { name: "Time Shooter 2",        emoji: "🔫", hue: 10,  url: CDN+"200.html" },
+  { name: "Bowmasters",            emoji: "🏹", hue: 30,  url: CDN+"0.html" },
+  { name: "Cluster Rush",          emoji: "🚛", hue: 40,  url: CDN+"81.html" },
+  { name: "Dreadhead Parkour",     emoji: "🤸", hue: 200, url: CDN+"310.html" },
+
+  // ── Multiplayer / .io ─────────────────────────────────────────────────
+  { name: "Paper.io 2",            emoji: "📄", hue: 280, url: CDN+"102.html" },
+  { name: "Basket Random",         emoji: "🏀", hue: 30,  url: CDN+"66.html" },
+  { name: "Boxing Random",         emoji: "🥊", hue: 0,   url: CDN+"77.html" },
+  { name: "Gladihoppers",          emoji: "⚔️",  hue: 350, url: CDN+"4.html" },
+
+  // ── Platformer ────────────────────────────────────────────────────────
+  { name: "OvO",                   emoji: "🏃", hue: 220, url: CDN+"1-fde.html" },
+  { name: "Vex 3",                 emoji: "🤺", hue: 180, url: CDN+"47.html" },
+  { name: "Vex 5",                 emoji: "🤺", hue: 190, url: CDN+"50.html" },
+  { name: "Vex 6",                 emoji: "🤺", hue: 200, url: CDN+"51.html" },
+  { name: "Big Tower Tiny Square", emoji: "🏗️",  hue: 50,  url: CDN+"170.html" },
+  { name: "Bob The Robber 2",      emoji: "🕵️",  hue: 240, url: CDN+"76.html" },
+  { name: "Fireboy & Watergirl 2", emoji: "🔥", hue: 20,  url: CDN+"88.html" },
+  { name: "Fireboy & Watergirl 3", emoji: "❄️",  hue: 190, url: CDN+"89.html" },
+
+  // ── Racing / Driving ─────────────────────────────────────────────────
+  { name: "Moto X3M",              emoji: "🏍️",  hue: 15,  url: CDN+"55.html" },
+  { name: "Moto X3M 2",            emoji: "🏍️",  hue: 20,  url: CDN+"97.html" },
+  { name: "Moto X3M 3",            emoji: "🏍️",  hue: 25,  url: CDN+"98.html" },
+  { name: "Moto X3M Pool Party",   emoji: "🏊", hue: 200, url: CDN+"124.html" },
+  { name: "Moto X3M Spooky Land",  emoji: "🎃", hue: 30,  url: CDN+"99.html" },
+  { name: "Highway Racer 2",       emoji: "🚗", hue: 210, url: CDN+"92.html" },
+
+  // ── Survival / Horror ────────────────────────────────────────────────
+  { name: "FNAF 1",                emoji: "🐻", hue: 20,  url: CDN+"38.html" },
+  { name: "FNAF 2",                emoji: "🐻", hue: 15,  url: CDN+"39.html" },
+  { name: "FNAF 3",                emoji: "🐻", hue: 10,  url: CDN+"40.html" },
+  { name: "FNAF 4",                emoji: "🐻", hue: 5,   url: CDN+"41.html" },
+  { name: "Granny",                emoji: "👵", hue: 40,  url: CDN+"90.html" },
+  { name: "Baldi's Basics",        emoji: "📏", hue: 60,  url: CDN+"65.html" },
+
+  // ── Casual / Mobile ───────────────────────────────────────────────────
+  { name: "Temple Run 2",          emoji: "🏛️",  hue: 30,  url: CDN+"10.html" },
+  { name: "Jetpack Joyride",       emoji: "🚀", hue: 220, url: CDN+"7.html" },
+  { name: "Crossy Road",           emoji: "🐔", hue: 90,  url: CDN+"24.html" },
+  { name: "Retro Bowl",            emoji: "🏈", hue: 35,  url: CDN+"33.html" },
+  { name: "Tiny Fishing",          emoji: "🎣", hue: 190, url: CDN+"108.html" },
+  { name: "BitLife",               emoji: "💬", hue: 240, url: CDN+"70.html" },
+  { name: "Gunspin",               emoji: "🔫", hue: 0,   url: CDN+"91.html" },
+
+  // ── Rhythm ───────────────────────────────────────────────────────────
+  { name: "WebOsu",                emoji: "🎵", hue: 340, url: CDN+"130.html" },
+  { name: "Flappy Bird",           emoji: "🐦", hue: 55,  url: CDN+"129.html" },
+
+  // ── Minecraft ────────────────────────────────────────────────────────
+  { name: "Minecraft Beta 1.7.3",  emoji: "⛏️",  hue: 100, url: CDN+"300.html" },
+
+  // ── Puzzle / Word ────────────────────────────────────────────────────
+  { name: "Wordle",                emoji: "🟩", hue: 130, url: CDN+"112.html" },
+
+  // ── Classic (self-hosted, always work) ───────────────────────────────
+  { name: "Snake",                 emoji: "🐍", hue: 120, url: "games/snake.html" },
+  { name: "2048",                  emoji: "🔢", hue: 40,  url: "games/2048.html" },
+  { name: "Tetris",                emoji: "🟥", hue: 0,   url: "games/tetris.html" },
+  { name: "Breakout",              emoji: "🧱", hue: 210, url: "games/breakout.html" },
+  { name: "Pong",                  emoji: "🏓", hue: 260, url: "games/pong.html" },
+  { name: "Minesweeper",           emoji: "💣", hue: 80,  url: "games/minesweeper.html" },
 ];
 
 // ── Tab cloak presets ───────────────────────────────────────────────────────
 const CLOAKS = [
-  { label: "None (Veil)",          title: "Veil",                  icon: "🌐" },
-  { label: "Google Classroom",     title: "Google Classroom",      icon: "https://www.gstatic.com/classroom/favicon.png" },
-  { label: "Google Docs",          title: "Untitled document — Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
-  { label: "Khan Academy",         title: "Khan Academy",          icon: "https://cdn.kastatic.org/images/favicon.ico" },
-  { label: "Desmos",               title: "Desmos | Graphing Calculator", icon: "https://www.desmos.com/assets/img/favicon.ico" },
-  { label: "Google Slides",        title: "Untitled presentation — Slides", icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
-  { label: "Canvas LMS",           title: "Dashboard",             icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
+  { label: "None (Veil)",               title: "Veil",                           icon: "🌐" },
+  { label: "Google Classroom",          title: "Google Classroom",               icon: "https://www.gstatic.com/classroom/favicon.png" },
+  { label: "Google Docs",               title: "Untitled document — Docs",       icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
+  { label: "Khan Academy",              title: "Khan Academy",                   icon: "https://cdn.kastatic.org/images/favicon.ico" },
+  { label: "Desmos",                    title: "Desmos | Graphing Calculator",   icon: "https://www.desmos.com/assets/img/favicon.ico" },
+  { label: "Google Slides",             title: "Untitled presentation — Slides", icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
+  { label: "Canvas LMS",               title: "Dashboard",                      icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
 ];
 
 // ── DOM refs ────────────────────────────────────────────────────────────────
@@ -98,12 +135,8 @@ searchInput.addEventListener("input", () => renderGames(searchInput.value));
 
 // ── Panic key (Alt+X) ────────────────────────────────────────────────────────
 document.addEventListener("keydown", e => {
-  if (e.altKey && e.key === "x") {
-    window.location.replace("https://classroom.google.com");
-  }
-  if (e.key === "Escape" && overlay.classList.contains("open")) {
-    closeGame();
-  }
+  if (e.altKey && e.key === "x") window.location.replace("https://classroom.google.com");
+  if (e.key === "Escape" && overlay.classList.contains("open")) closeGame();
 });
 
 // ── Tab cloak ────────────────────────────────────────────────────────────────
@@ -119,7 +152,7 @@ function renderCloaks() {
       activeCloak = i;
       applyCloak(c);
       renderCloaks();
-      cloakPanel.classList.remove("open");
+      cloakPanel.style.display = "none";
     });
     cloakOpts.appendChild(el);
   });
@@ -134,7 +167,7 @@ function applyCloak(c) {
   }
 }
 
-cloakBtn.addEventListener("click", (e) => {
+cloakBtn.addEventListener("click", e => {
   e.stopPropagation();
   cloakPanel.style.display = cloakPanel.style.display === "none" ? "block" : "none";
 });
