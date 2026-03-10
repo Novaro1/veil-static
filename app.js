@@ -99,7 +99,7 @@ function renderGames(filter = "") {
     const tile = document.createElement("div");
     tile.className = "game-tile";
     tile.innerHTML = `
-      <div class="game-thumb" style="background:linear-gradient(135deg,hsl(${g.hue},40%,12%),hsl(${g.hue},50%,18%))">${g.emoji}</div>
+      <div class="game-thumb" style="background:hsla(${g.hue},55%,20%,1)">${g.emoji}</div>
       <div class="game-label">${g.name}</div>
     `;
     tile.addEventListener("click", () => openGame(g));

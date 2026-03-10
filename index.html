@@ -4,78 +4,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Veil</title>
-  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="icon" id="favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366f1'/><line x1='4' y1='21' x2='28' y2='21' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' stroke-linecap='round'/><path d='M8 26 L16 13 L24 26' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></svg>" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <canvas id="stars"></canvas>
+  <!-- Aurora background -->
+  <div class="aurora" aria-hidden="true">
+    <div class="aurora-blob b1"></div>
+    <div class="aurora-blob b2"></div>
+    <div class="aurora-blob b3"></div>
+    <div class="aurora-blob b4"></div>
+  </div>
+  <canvas id="veil-stars" aria-hidden="true"></canvas>
+  <div id="cursor-glow" aria-hidden="true"></div>
 
   <!-- Nav -->
   <nav id="nav">
     <div class="nav-inner">
-      <span class="logo">VEIL</span>
+      <a class="nav-logo" href="#">
+        <div class="nav-logo-mark">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="none">
+            <line x1="4" y1="21" x2="28" y2="21" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 26 L16 13 L24 26" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="nav-wordmark">Veil</span>
+      </a>
       <div class="nav-center">
-        <input type="text" id="search" placeholder="Search games..." autocomplete="off" />
+        <input type="text" id="search" placeholder="Search games..." autocomplete="off" spellcheck="false" />
       </div>
       <div class="nav-right">
-        <button class="cloak-btn" id="cloakBtn" title="Tab Cloak">🎭</button>
+        <button class="nav-icon-btn" id="cloakBtn" title="Tab Cloak" aria-label="Tab Cloak">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1.5L1.5 4.5v3.5C1.5 11.5 4.5 14 8 14.5 11.5 14 14.5 11.5 14.5 8V4.5L8 1.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <a href="https://discord.gg/NScKEHkd6U" target="_blank" class="btn btn-sm">Discord</a>
       </div>
     </div>
   </nav>
 
-  <!-- Cloak picker -->
+  <!-- Cloak panel -->
   <div class="cloak-panel" id="cloakPanel" style="display:none">
-    <div class="cloak-title">Tab Cloak</div>
+    <div class="cloak-panel-header">
+      <span class="cloak-panel-title">Tab Cloak</span>
+    </div>
     <div class="cloak-options" id="cloakOptions"></div>
   </div>
 
-  <!-- Main -->
-  <main>
-    <div class="hero-mini">
-      <h1>VEIL <span class="gradient-text">Games</span></h1>
-      <p>Click any game to play. Press <kbd>Alt+X</kbd> to instantly close.</p>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="logo-wrap" aria-hidden="true">
+      <div class="logo-mark">
+        <svg class="logo-svg" viewBox="0 0 32 32" fill="none">
+          <line x1="4" y1="21" x2="28" y2="21" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M8 26 L16 13 L24 26" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
     </div>
+    <h1>Veil <span class="gradient-text">Games</span></h1>
+    <p class="subtitle">Click any game to play &middot; Press <kbd>Alt+X</kbd> to instantly close</p>
+  </section>
 
+  <!-- Games -->
+  <main>
     <div class="game-grid" id="gameGrid"></div>
-
     <div class="no-results" id="noResults" style="display:none">No games found.</div>
   </main>
 
-  <!-- About strip -->
-  <section class="about-strip">
-    <div class="about-inner">
-      <div class="about-block">
-        <span class="about-icon">🌐</span>
-        <div>
-          <strong>Full Proxy</strong>
-          <p>Need more? Launch the full Veil proxy to access any site.</p>
-          <a href="https://veilub.mooo.com" target="_blank" class="btn btn-sm btn-primary" style="margin-top:8px">Open Proxy</a>
-        </div>
-      </div>
-      <div class="about-block">
-        <span class="about-icon">⭐</span>
-        <div>
-          <strong>Ambassador Program</strong>
-          <p>Advertise Veil and unlock exclusive themes, cloaks &amp; early access.</p>
-          <a href="https://discord.gg/NScKEHkd6U" target="_blank" class="btn btn-sm" style="margin-top:8px">Learn more</a>
-        </div>
-      </div>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a href="https://veilub.mooo.com" target="_blank">Full Proxy</a>
+      <span class="footer-sep"></span>
+      <a href="https://discord.gg/NScKEHkd6U" target="_blank">Discord</a>
+      <span class="footer-sep"></span>
+      <span>Press <kbd>Alt+X</kbd> to panic-close</span>
     </div>
-  </section>
+  </footer>
 
-  <!-- Game iframe overlay -->
+  <!-- Game overlay -->
   <div class="game-overlay" id="gameOverlay">
     <div class="game-bar">
       <span class="game-bar-title" id="gameBarTitle">Game</span>
       <div class="game-bar-actions">
-        <button id="fullscreenBtn" title="Fullscreen">⛶</button>
-        <button id="closeGame" title="Close">✕</button>
+        <button id="fullscreenBtn" title="Fullscreen">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <path d="M1 4V1h3M10 1h3v3M13 10v3h-3M4 13H1v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button id="closeGame" title="Close">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
     </div>
     <iframe id="gameFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups" allowfullscreen></iframe>
