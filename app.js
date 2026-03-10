@@ -1,3 +1,5 @@
+"use strict";
+
 // ── Games list ─────────────────────────────────────────────────────────────
 const GAMES = [
   // ── Action / Shooting ──────────────────────────────────────────────────
@@ -66,112 +68,197 @@ const GAMES = [
   { name: "Minesweeper",           emoji: "💣", hue: 80,  url: "games/minesweeper.html" },
 ];
 
-// ── Tab cloak presets ───────────────────────────────────────────────────────
-const CLOAKS = [
-  { label: "None (Veil)",               title: "Veil",                           icon: "🌐" },
-  { label: "Google Classroom",          title: "Google Classroom",               icon: "https://www.gstatic.com/classroom/favicon.png" },
-  { label: "Google Docs",               title: "Untitled document — Docs",       icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
-  { label: "Khan Academy",              title: "Khan Academy",                   icon: "https://cdn.kastatic.org/images/favicon.ico" },
-  { label: "Desmos",                    title: "Desmos | Graphing Calculator",   icon: "https://www.desmos.com/assets/img/favicon.ico" },
-  { label: "Google Slides",             title: "Untitled presentation — Slides", icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
-  { label: "Canvas LMS",               title: "Dashboard",                      icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
-];
+// ── Cloak presets ───────────────────────────────────────────────────────────
+const CLOAK_PRESETS = {
+  none:      { title: "Veil",                           icon: null },
+  classroom: { title: "Google Classroom",               icon: "https://www.gstatic.com/classroom/favicon.png" },
+  docs:      { title: "Untitled document — Docs",       icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
+  slides:    { title: "Untitled presentation — Slides", icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
+  khan:      { title: "Khan Academy",                   icon: "https://cdn.kastatic.org/images/favicon.ico" },
+  desmos:    { title: "Desmos | Graphing Calculator",   icon: "https://www.desmos.com/assets/img/favicon.ico" },
+};
 
-// ── DOM refs ────────────────────────────────────────────────────────────────
-const gameGrid    = document.getElementById("gameGrid");
-const searchInput = document.getElementById("search");
-const noResults   = document.getElementById("noResults");
-const overlay     = document.getElementById("gameOverlay");
-const gameFrame   = document.getElementById("gameFrame");
-const gameBarTitle= document.getElementById("gameBarTitle");
-const cloakBtn    = document.getElementById("cloakBtn");
-const cloakPanel  = document.getElementById("cloakPanel");
-const cloakOpts   = document.getElementById("cloakOptions");
-const favicon     = document.getElementById("favicon");
+// ── Panic URLs ──────────────────────────────────────────────────────────────
+const PANIC_URLS = {
+  classroom: "https://classroom.google.com",
+  google:    "https://www.google.com",
+  desmos:    "https://www.desmos.com/calculator",
+  gmail:     "https://mail.google.com",
+  khan:      "https://www.khanacademy.org",
+};
 
-// ── Render games ─────────────────────────────────────────────────────────────
-function renderGames(filter = "") {
-  const q = filter.toLowerCase();
-  const filtered = GAMES.filter(g => g.name.toLowerCase().includes(q));
-  gameGrid.innerHTML = "";
-  noResults.style.display = filtered.length ? "none" : "block";
-  filtered.forEach(g => {
-    const tile = document.createElement("div");
-    tile.className = "game-tile";
-    tile.innerHTML = `
-      <div class="game-thumb" style="background:hsla(${g.hue},55%,20%,1)">${g.emoji}</div>
-      <div class="game-label">${g.name}</div>
-    `;
-    tile.addEventListener("click", () => openGame(g));
-    gameGrid.appendChild(tile);
-  });
+// ── Settings panel ──────────────────────────────────────────────────────────
+const settingsOverlay = document.getElementById("settings-overlay");
+const settingsPanel   = document.getElementById("settings-panel");
+
+function openSettings() {
+  settingsPanel.removeAttribute("aria-hidden");
+  settingsOverlay.removeAttribute("aria-hidden");
+  settingsPanel.classList.add("open");
+  settingsOverlay.classList.add("open");
 }
 
-// ── Open / close game ────────────────────────────────────────────────────────
+function closeSettings() {
+  settingsPanel.classList.remove("open");
+  settingsOverlay.classList.remove("open");
+  settingsPanel.setAttribute("aria-hidden", "true");
+  settingsOverlay.setAttribute("aria-hidden", "true");
+}
+
+document.getElementById("btn-settings")?.addEventListener("click", openSettings);
+document.getElementById("btn-settings-close")?.addEventListener("click", closeSettings);
+settingsOverlay?.addEventListener("click", closeSettings);
+
+// ── Tab cloak ────────────────────────────────────────────────────────────────
+const favicon       = document.getElementById("favicon");
+const cloakSelect   = document.getElementById("cloak-preset");
+const VEIL_ICON_HREF = favicon?.href || "";
+
+function applyCloak(key) {
+  const preset = CLOAK_PRESETS[key] || CLOAK_PRESETS.none;
+  document.title = preset.title;
+  if (!favicon) return;
+  if (preset.icon) {
+    favicon.href = preset.icon;
+  } else {
+    favicon.href = VEIL_ICON_HREF;
+  }
+  localStorage.setItem("veil_cloak", key);
+}
+
+cloakSelect?.addEventListener("change", () => applyCloak(cloakSelect.value));
+
+// Restore saved cloak
+(function () {
+  const saved = localStorage.getItem("veil_cloak") || "none";
+  if (cloakSelect) cloakSelect.value = saved;
+  applyCloak(saved);
+})();
+
+// ── Panic key (Alt+X) ────────────────────────────────────────────────────────
+const panicSelect = document.getElementById("panic-url");
+
+panicSelect?.addEventListener("change", () => {
+  localStorage.setItem("veil_panic", panicSelect.value);
+});
+
+// Restore saved panic destination
+(function () {
+  const saved = localStorage.getItem("veil_panic") || "classroom";
+  if (panicSelect) panicSelect.value = saved;
+})();
+
+document.addEventListener("keydown", e => {
+  if (e.altKey && e.key === "x") {
+    const dest = panicSelect?.value || "classroom";
+    window.location.replace(PANIC_URLS[dest] || PANIC_URLS.classroom);
+  }
+  if (e.key === "Escape") {
+    const overlay = document.getElementById("gameOverlay");
+    if (overlay?.classList.contains("open")) closeGame();
+    else closeSettings();
+  }
+});
+
+// ── Appearance toggles ───────────────────────────────────────────────────────
+const scanlinesCb = document.getElementById("fx-scanlines");
+const vignetteCb  = document.getElementById("fx-vignette");
+
+function applyAppearance() {
+  document.body.classList.toggle("no-scanlines", !scanlinesCb?.checked);
+  document.body.classList.toggle("no-vignette",  !vignetteCb?.checked);
+  localStorage.setItem("veil_scanlines", scanlinesCb?.checked ? "1" : "0");
+  localStorage.setItem("veil_vignette",  vignetteCb?.checked  ? "1" : "0");
+}
+
+scanlinesCb?.addEventListener("change", applyAppearance);
+vignetteCb?.addEventListener("change",  applyAppearance);
+
+// Restore saved appearance
+(function () {
+  const sl = localStorage.getItem("veil_scanlines");
+  const vg = localStorage.getItem("veil_vignette");
+  if (scanlinesCb && sl !== null) scanlinesCb.checked = sl === "1";
+  if (vignetteCb  && vg !== null) vignetteCb.checked  = vg === "1";
+  applyAppearance();
+})();
+
+// ── Games collapse ───────────────────────────────────────────────────────────
+const COLLAPSE_KEY = "veil_games_collapsed";
+const gsGrid   = document.getElementById("gs-grid");
+const gsToggle = document.getElementById("gs-toggle");
+const gsNoRes  = document.getElementById("gs-no-results");
+
+function setCollapsed(on) {
+  if (!gsGrid || !gsToggle) return;
+  gsGrid.classList.toggle("collapsed", on);
+  gsToggle.classList.toggle("collapsed", on);
+  gsToggle.title = on ? "Expand games" : "Collapse games";
+  localStorage.setItem(COLLAPSE_KEY, on ? "1" : "0");
+}
+
+gsToggle?.addEventListener("click", () => setCollapsed(!gsGrid.classList.contains("collapsed")));
+
+// ── Render games ─────────────────────────────────────────────────────────────
+function renderGames(filter) {
+  if (!gsGrid) return;
+  const q        = (filter || "").toLowerCase();
+  const filtered = GAMES.filter(g => g.name.toLowerCase().includes(q));
+  gsGrid.innerHTML = "";
+  if (gsNoRes) gsNoRes.style.display = filtered.length ? "none" : "block";
+
+  for (const g of filtered) {
+    const tile = document.createElement("div");
+    tile.className = "ql-tile";
+    tile.title = g.name;
+
+    const icon = document.createElement("div");
+    icon.className = "gs-tile-icon";
+    icon.textContent = g.emoji || "🎮";
+    icon.style.background = `hsla(${g.hue ?? 220}, 55%, 20%, 1)`;
+
+    const label = document.createElement("div");
+    label.className = "ql-tile-name";
+    label.textContent = g.name;
+
+    tile.appendChild(icon);
+    tile.appendChild(label);
+    tile.addEventListener("click", () => openGame(g));
+    gsGrid.appendChild(tile);
+  }
+}
+
+// ── Search ───────────────────────────────────────────────────────────────────
+document.getElementById("gs-search")?.addEventListener("input", function () {
+  renderGames(this.value);
+});
+
+// ── Game overlay ─────────────────────────────────────────────────────────────
+const gameOverlay  = document.getElementById("gameOverlay");
+const gameFrame    = document.getElementById("gameFrame");
+const gameBarTitle = document.getElementById("gameBarTitle");
+
 function openGame(g) {
+  if (!gameFrame || !gameOverlay) return;
   gameFrame.src = g.url;
-  gameBarTitle.textContent = g.name;
-  overlay.classList.add("open");
+  if (gameBarTitle) gameBarTitle.textContent = g.name;
+  gameOverlay.classList.add("open");
   document.body.style.overflow = "hidden";
 }
 
 function closeGame() {
-  overlay.classList.remove("open");
-  gameFrame.src = "";
+  if (!gameOverlay) return;
+  gameOverlay.classList.remove("open");
+  if (gameFrame) gameFrame.src = "";
   document.body.style.overflow = "";
 }
 
-document.getElementById("closeGame").addEventListener("click", closeGame);
+document.getElementById("closeGame")?.addEventListener("click", closeGame);
 
-document.getElementById("fullscreenBtn").addEventListener("click", () => {
-  if (gameFrame.requestFullscreen) gameFrame.requestFullscreen();
+document.getElementById("fullscreenBtn")?.addEventListener("click", () => {
+  if (gameFrame?.requestFullscreen) gameFrame.requestFullscreen();
 });
-
-// ── Search ───────────────────────────────────────────────────────────────────
-searchInput.addEventListener("input", () => renderGames(searchInput.value));
-
-// ── Panic key (Alt+X) ────────────────────────────────────────────────────────
-document.addEventListener("keydown", e => {
-  if (e.altKey && e.key === "x") window.location.replace("https://classroom.google.com");
-  if (e.key === "Escape" && overlay.classList.contains("open")) closeGame();
-});
-
-// ── Tab cloak ────────────────────────────────────────────────────────────────
-let activeCloak = 0;
-
-function renderCloaks() {
-  cloakOpts.innerHTML = "";
-  CLOAKS.forEach((c, i) => {
-    const el = document.createElement("div");
-    el.className = "cloak-opt" + (i === activeCloak ? " active" : "");
-    el.textContent = c.label;
-    el.addEventListener("click", () => {
-      activeCloak = i;
-      applyCloak(c);
-      renderCloaks();
-      cloakPanel.style.display = "none";
-    });
-    cloakOpts.appendChild(el);
-  });
-}
-
-function applyCloak(c) {
-  document.title = c.title;
-  if (c.icon.startsWith("http")) {
-    favicon.href = c.icon;
-  } else {
-    favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${c.icon}</text></svg>`;
-  }
-}
-
-cloakBtn.addEventListener("click", e => {
-  e.stopPropagation();
-  cloakPanel.style.display = cloakPanel.style.display === "none" ? "block" : "none";
-});
-
-document.addEventListener("click", () => { cloakPanel.style.display = "none"; });
-cloakPanel.addEventListener("click", e => e.stopPropagation());
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 renderGames();
-renderCloaks();
+setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "1");
