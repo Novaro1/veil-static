@@ -1,9 +1,3 @@
-@property --border-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -16,9 +10,6 @@
   --accent:         #6366f1;
   --accent-light:   #818cf8;
   --accent-lighter: #a5b4fc;
-  --aurora-2:       #7c3aed;
-  --aurora-3:       #0ea5e9;
-  --aurora-4:       #ec4899;
   --radius:         12px;
 }
 
@@ -74,25 +65,25 @@ body::after {
 
 .b1 {
   width: 820px; height: 660px;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 58%, transparent) 0%, transparent 65%);
+  background: radial-gradient(ellipse, rgba(99,102,241,0.58) 0%, transparent 65%);
   top: -340px; left: calc(50% - 410px);
   animation: blob1 22s ease-in-out infinite;
 }
 .b2 {
   width: 620px; height: 500px;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--aurora-2) 42%, transparent) 0%, transparent 65%);
+  background: radial-gradient(ellipse, rgba(124,58,237,0.42) 0%, transparent 65%);
   top: -170px; right: -230px;
   animation: blob2 30s ease-in-out infinite;
 }
 .b3 {
   width: 520px; height: 420px;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--aurora-3) 26%, transparent) 0%, transparent 65%);
+  background: radial-gradient(ellipse, rgba(14,165,233,0.26) 0%, transparent 65%);
   bottom: -150px; left: -130px;
   animation: blob3 25s ease-in-out infinite;
 }
 .b4 {
   width: 450px; height: 340px;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--aurora-4) 20%, transparent) 0%, transparent 65%);
+  background: radial-gradient(ellipse, rgba(236,72,153,0.20) 0%, transparent 65%);
   bottom: 5%; right: -90px;
   animation: blob4 19s ease-in-out infinite;
 }
@@ -133,8 +124,8 @@ body::after {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--accent) 20%, transparent) 0%,
-    color-mix(in srgb, var(--accent) 8%,  transparent) 40%,
+    rgba(99,102,241,0.20) 0%,
+    rgba(99,102,241,0.08) 40%,
     transparent 65%
   );
   pointer-events: none;
@@ -148,9 +139,9 @@ nav {
   top: 0;
   z-index: 200;
   border-bottom: 1px solid var(--border);
-  background: rgba(6, 6, 16, 0.80);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  background: rgba(6, 6, 16, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .nav-inner {
@@ -174,7 +165,7 @@ nav {
 .nav-logo-mark {
   width: 32px; height: 32px;
   border-radius: 9px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 80%, black), var(--accent-light));
+  background: linear-gradient(145deg, #4f52c1, var(--accent-light));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -205,8 +196,8 @@ nav {
 }
 
 #search:focus {
-  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: rgba(99,102,241,0.50);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
 }
 
 #search::placeholder { color: var(--muted); }
@@ -229,15 +220,15 @@ nav {
   text-decoration: none;
   transition: background 0.2s, border-color 0.2s;
   cursor: pointer;
-  background: rgba(99, 102, 241, 0.10);
+  background: rgba(99,102,241,0.10);
   color: var(--text);
   border: 1px solid var(--border);
   font-family: inherit;
 }
 
 .btn:hover {
-  background: rgba(99, 102, 241, 0.20);
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: rgba(99,102,241,0.20);
+  border-color: rgba(99,102,241,0.35);
 }
 
 .btn-sm { padding: 6px 14px; font-size: 0.82rem; }
@@ -257,8 +248,8 @@ nav {
 
 .nav-icon-btn:hover {
   color: var(--text);
-  background: rgba(99, 102, 241, 0.15);
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.35);
 }
 
 /* ── Cloak panel ── */
@@ -272,8 +263,8 @@ nav {
   border-radius: var(--radius);
   width: 240px;
   box-shadow: 0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   overflow: hidden;
 }
 
@@ -305,10 +296,10 @@ nav {
   color: var(--text);
 }
 
-.cloak-opt:hover { background: rgba(255, 255, 255, 0.06); }
+.cloak-opt:hover { background: rgba(255,255,255,0.06); }
 
 .cloak-opt.active {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  background: rgba(99,102,241,0.14);
   color: var(--accent-lighter);
 }
 
@@ -335,7 +326,7 @@ nav {
   position: absolute;
   inset: 0;
   border-radius: 20px;
-  border: 2px solid rgba(99, 102, 241, 0.60);
+  border: 2px solid rgba(99,102,241,0.60);
   pointer-events: none;
   animation: ring-pulse 3s ease-out infinite;
 }
@@ -352,7 +343,7 @@ nav {
   z-index: 0;
   width: 64px; height: 64px;
   border-radius: 20px;
-  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 80%, black), var(--accent-light), var(--accent-lighter));
+  background: linear-gradient(145deg, #4f52c1, var(--accent-light), var(--accent-lighter));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -376,15 +367,15 @@ nav {
 @keyframes logo-glow {
   0%,100% {
     box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
-      0 0 48px  color-mix(in srgb, var(--accent) 55%, transparent),
-      0 0 110px color-mix(in srgb, var(--accent) 22%, transparent);
+      0 0 0 1px rgba(99,102,241,0.30),
+      0 0 48px  rgba(99,102,241,0.55),
+      0 0 110px rgba(99,102,241,0.22);
   }
   50% {
     box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent),
-      0 0 68px  color-mix(in srgb, var(--accent) 80%, transparent),
-      0 0 140px color-mix(in srgb, var(--accent) 38%, transparent);
+      0 0 0 1px rgba(99,102,241,0.55),
+      0 0 68px  rgba(99,102,241,0.80),
+      0 0 140px rgba(99,102,241,0.38);
   }
 }
 
@@ -394,11 +385,11 @@ nav {
   letter-spacing: -0.04em;
   background: linear-gradient(
     110deg,
-    color-mix(in srgb, var(--accent-lighter) 30%, white) 15%,
-    color-mix(in srgb, var(--accent-lighter) 60%, white) 30%,
+    #e4e9fe 15%,
+    #c9d2fd 30%,
     var(--accent-light) 50%,
-    color-mix(in srgb, var(--accent-lighter) 60%, white) 70%,
-    color-mix(in srgb, var(--accent-lighter) 30%, white) 85%
+    #c9d2fd 70%,
+    #e4e9fe 85%
   );
   background-size: 250% auto;
   -webkit-background-clip: text;
@@ -409,13 +400,6 @@ nav {
 }
 
 @keyframes gradient-shimmer { to { background-position: 250% center; } }
-
-.gradient-text {
-  background: inherit;
-  -webkit-background-clip: inherit;
-  background-clip: inherit;
-  -webkit-text-fill-color: inherit;
-}
 
 .subtitle {
   color: var(--muted);
@@ -458,14 +442,12 @@ main {
   background: rgba(14, 14, 30, 0.50);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, transform 0.15s;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   text-align: center;
 }
 
 .game-tile:hover {
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: rgba(99,102,241,0.10);
+  border-color: rgba(99,102,241,0.30);
   transform: translateY(-2px);
 }
 
@@ -579,8 +561,8 @@ main {
 
 .game-bar-actions button:hover {
   color: var(--text);
-  background: rgba(99, 102, 241, 0.18);
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  background: rgba(99,102,241,0.18);
+  border-color: rgba(99,102,241,0.35);
 }
 
 #gameFrame {
