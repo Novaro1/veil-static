@@ -54,6 +54,38 @@ body::after {
 body.no-scanlines::after { content: none; }
 body.no-vignette::before  { content: none; }
 
+/* ── Lag Reduction / Performance mode ───────────────────────────────────── */
+body.perf-mode main,
+body.perf-mode #settings-overlay,
+body.perf-mode #settings-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.perf-mode .aurora-blob {
+  animation-play-state: paused !important;
+  opacity: 0.35;
+}
+body.perf-mode header h1 {
+  animation: slide-up-fade 0.5s ease-out 0.2s both !important;
+}
+body.perf-mode .logo-wrap {
+  animation: none !important;
+}
+body.perf-mode .logo-wrap::before,
+body.perf-mode .logo-wrap::after {
+  animation: none !important;
+  opacity: 0 !important;
+}
+body.perf-mode .logo-mark {
+  animation: logo-entrance 0.7s cubic-bezier(0.34,1.56,0.64,1) both !important;
+}
+body.perf-mode .ql-tile {
+  transition: none !important;
+}
+body.perf-mode .ql-tile:hover {
+  transform: none !important;
+}
+
 /* ── Aurora ── */
 .aurora { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
 .aurora-blob { position: absolute; border-radius: 50%; filter: blur(90px); }

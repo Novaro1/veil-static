@@ -164,22 +164,29 @@ document.addEventListener("keydown", e => {
 const scanlinesCb = document.getElementById("fx-scanlines");
 const vignetteCb  = document.getElementById("fx-vignette");
 
+const perfToggle  = document.getElementById("perf-mode-toggle");
+
 function applyAppearance() {
   document.body.classList.toggle("no-scanlines", !scanlinesCb?.checked);
   document.body.classList.toggle("no-vignette",  !vignetteCb?.checked);
+  document.body.classList.toggle("perf-mode",    !!perfToggle?.checked);
   localStorage.setItem("veil_scanlines", scanlinesCb?.checked ? "1" : "0");
   localStorage.setItem("veil_vignette",  vignetteCb?.checked  ? "1" : "0");
+  localStorage.setItem("veil_perf",      perfToggle?.checked  ? "1" : "0");
 }
 
 scanlinesCb?.addEventListener("change", applyAppearance);
 vignetteCb?.addEventListener("change",  applyAppearance);
+perfToggle?.addEventListener("change",  applyAppearance);
 
 // Restore saved appearance
 (function () {
   const sl = localStorage.getItem("veil_scanlines");
   const vg = localStorage.getItem("veil_vignette");
+  const pf = localStorage.getItem("veil_perf");
   if (scanlinesCb && sl !== null) scanlinesCb.checked = sl === "1";
   if (vignetteCb  && vg !== null) vignetteCb.checked  = vg === "1";
+  if (perfToggle  && pf !== null) perfToggle.checked  = pf === "1";
   applyAppearance();
 })();
 
