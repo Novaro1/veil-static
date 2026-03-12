@@ -266,6 +266,25 @@ document.getElementById("fullscreenBtn")?.addEventListener("click", () => {
   if (gameFrame?.requestFullscreen) gameFrame.requestFullscreen();
 });
 
+// ── Proxy search form ─────────────────────────────────────────────────────────
+const proxySearchForm = document.getElementById("proxy-search-form");
+const proxyInput      = document.getElementById("proxy-input");
+
+proxySearchForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const val    = proxyInput?.value?.trim();
+  const engine = document.querySelector("input[name='engine']:checked")?.value || "google";
+  if (val && window._veilNavigate) window._veilNavigate(val, engine);
+});
+
+// ── Quick access tiles ────────────────────────────────────────────────────────
+document.getElementById("ql-grid")?.querySelectorAll(".ql-tile[data-url]").forEach((tile) => {
+  tile.addEventListener("click", () => {
+    const url = tile.dataset.url;
+    if (url && window._veilNavigate) window._veilNavigate(url, "google");
+  });
+});
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 renderGames();
 setCollapsed(localStorage.getItem(COLLAPSE_KEY) === "1");

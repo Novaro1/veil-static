@@ -677,3 +677,81 @@ footer a:hover { opacity: 1; }
   main { margin: 0 0.5rem; padding: 1.2rem; }
   .games-section, .quick-links { padding: 0 0.1rem; }
 }
+
+/* ── Proxy overlay ── */
+#proxy-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--bg);
+  flex-direction: column;
+}
+#proxy-overlay.open { display: flex; }
+body.proxy-open { overflow: hidden; }
+
+#proxy-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  height: 48px;
+}
+
+#proxy-load-bar {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  transition: width 0.3s;
+  border-radius: 0 2px 2px 0;
+}
+#proxy-load-bar.active { width: 70%; }
+
+.proxy-nav-btns { display: flex; gap: 2px; }
+.proxy-nav-btns button, #proxy-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  width: 30px; height: 30px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s, background 0.15s;
+}
+.proxy-nav-btns button:hover, #proxy-close:hover { color: var(--text); background: rgba(99,102,241,0.14); }
+
+#proxy-url-form { flex: 1; min-width: 0; }
+#proxy-url-bar {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-family: inherit;
+  padding: 0.38rem 0.65rem;
+  outline: none;
+  box-sizing: border-box;
+}
+#proxy-url-bar:focus { border-color: var(--accent); }
+
+#proxy-frame { flex: 1; border: none; width: 100%; background: #000; }
+
+/* ── Proxy status msg ── */
+.proxy-status {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(99,102,241,0.07);
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 10px;
+}

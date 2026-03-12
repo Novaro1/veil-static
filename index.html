@@ -45,39 +45,33 @@
       <p class="subtitle">The web, unveiled.</p>
     </header>
 
-    <!-- Search card — proxy features disabled -->
+    <!-- Search card -->
     <main>
-      <div class="proxy-notice">
-        🔒 Proxy browsing requires the
-        <a href="https://veilub.mooo.com" target="_blank">full Veil proxy</a>
-      </div>
-
-      <div class="proxy-disabled" aria-hidden="true">
-        <div class="search-bar">
-          <input type="text" placeholder="Search or enter a URL..." disabled tabindex="-1" />
-          <button disabled tabindex="-1">Go</button>
-        </div>
-        <div class="engine-row">
-          <span class="engine-label">Search with</span>
-          <div class="engine-chips">
-            <label class="chip"><input type="radio" disabled /><span>Google</span></label>
-            <label class="chip"><input type="radio" disabled /><span>Bing</span></label>
-            <label class="chip"><input type="radio" disabled /><span>DuckDuckGo</span></label>
-          </div>
+      <div id="proxy-status" class="proxy-status" style="display:none;"></div>
+      <form id="proxy-search-form" class="search-bar" autocomplete="off">
+        <input type="text" id="proxy-input" placeholder="Search or enter a URL..." autocomplete="off" spellcheck="false" />
+        <button type="submit">Go</button>
+      </form>
+      <div class="engine-row">
+        <span class="engine-label">Search with</span>
+        <div class="engine-chips">
+          <label class="chip"><input type="radio" name="engine" value="google" checked /><span>Google</span></label>
+          <label class="chip"><input type="radio" name="engine" value="bing" /><span>Bing</span></label>
+          <label class="chip"><input type="radio" name="engine" value="duckduckgo" /><span>DuckDuckGo</span></label>
         </div>
       </div>
     </main>
 
-    <!-- Quick access — disabled -->
+    <!-- Quick access -->
     <section class="quick-links">
-      <div class="ql-label">Quick Access <span class="proxy-tag">Proxy only</span></div>
-      <div class="ql-grid proxy-disabled" aria-hidden="true">
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#1a2740;color:#4285f4;font-size:1.1rem;font-weight:700;">G</div><div class="ql-tile-name">Google</div></div>
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#1f1215;color:#ef4444;font-size:1.1rem;font-weight:700;">▶</div><div class="ql-tile-name">YouTube</div></div>
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#0e1628;color:#5865f2;font-size:1.1rem;font-weight:700;">D</div><div class="ql-tile-name">Discord</div></div>
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#1a1208;color:#ff6314;font-size:1.1rem;font-weight:700;">R</div><div class="ql-tile-name">Reddit</div></div>
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#121212;color:#1db954;font-size:1.1rem;font-weight:700;">♪</div><div class="ql-tile-name">Spotify</div></div>
-        <div class="ql-tile"><div class="ql-tile-icon" style="background:#111827;color:#e2e2f0;font-size:1.1rem;font-weight:700;">W</div><div class="ql-tile-name">Wikipedia</div></div>
+      <div class="ql-label">Quick Access</div>
+      <div class="ql-grid" id="ql-grid">
+        <div class="ql-tile" data-url="https://google.com"><div class="ql-tile-icon" style="background:#1a2740;color:#4285f4;font-size:1.1rem;font-weight:700;">G</div><div class="ql-tile-name">Google</div></div>
+        <div class="ql-tile" data-url="https://youtube.com"><div class="ql-tile-icon" style="background:#1f1215;color:#ef4444;font-size:1.1rem;font-weight:700;">▶</div><div class="ql-tile-name">YouTube</div></div>
+        <div class="ql-tile" data-url="https://discord.com/app"><div class="ql-tile-icon" style="background:#0e1628;color:#5865f2;font-size:1.1rem;font-weight:700;">D</div><div class="ql-tile-name">Discord</div></div>
+        <div class="ql-tile" data-url="https://reddit.com"><div class="ql-tile-icon" style="background:#1a1208;color:#ff6314;font-size:1.1rem;font-weight:700;">R</div><div class="ql-tile-name">Reddit</div></div>
+        <div class="ql-tile" data-url="https://spotify.com"><div class="ql-tile-icon" style="background:#121212;color:#1db954;font-size:1.1rem;font-weight:700;">♪</div><div class="ql-tile-name">Spotify</div></div>
+        <div class="ql-tile" data-url="https://wikipedia.org"><div class="ql-tile-icon" style="background:#111827;color:#e2e2f0;font-size:1.1rem;font-weight:700;">W</div><div class="ql-tile-name">Wikipedia</div></div>
       </div>
     </section>
 
@@ -99,10 +93,35 @@
     </section>
 
     <footer>
-      <p>Games hub &middot; <a href="https://veilub.mooo.com" target="_blank">Full Proxy</a> &middot; <a href="https://discord.gg/NScKEHkd6U" target="_blank">Discord</a></p>
+      <p>Static Edition &middot; <a href="https://veilub.mooo.com" target="_blank">Full Proxy</a> &middot; <a href="https://discord.gg/NScKEHkd6U" target="_blank">Discord</a></p>
     </footer>
 
   </div><!-- .home -->
+
+  <!-- Proxy browser overlay -->
+  <div id="proxy-overlay">
+    <div id="proxy-bar">
+      <div id="proxy-load-bar"></div>
+      <div class="proxy-nav-btns">
+        <button id="proxy-back" title="Back">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="proxy-forward" title="Forward">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="proxy-reload" title="Reload">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7a5 5 0 1 0 1-3H1m2-2v3H0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <form id="proxy-url-form" autocomplete="off">
+        <input id="proxy-url-bar" type="text" spellcheck="false" autocomplete="off" placeholder="Search or enter URL…" />
+      </form>
+      <button id="proxy-close" title="Close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <iframe id="proxy-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups allow-modals" allowfullscreen></iframe>
+  </div>
 
   <!-- Settings overlay + panel -->
   <div id="settings-overlay" aria-hidden="true"></div>
@@ -219,6 +238,9 @@
   </div>
 
   <script src="stars.js"></script>
+  <script src="scramjet/scramjet.all.js"></script>
+  <script src="baremux/index.js"></script>
+  <script src="proxy.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
