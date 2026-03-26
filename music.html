@@ -581,7 +581,7 @@
 
 </div>
 
-<audio id="mp-audio" crossorigin="anonymous"></audio>
+<audio id="mp-audio"></audio>
 
 <script>
 "use strict";
@@ -731,27 +731,39 @@ async function loadTrack(track) {
   // Clear stale event handlers before loading new track
   audio.oncanplay = null;
   audio.onerror = null;
-  audio.src = `https://veilub.mooo.com/api/music/stream?id=${track.id}`;
+
+  // Fetch audio as blob to avoid cross-origin <audio> restrictions
+  const streamUrl = `https://veilub.mooo.com/api/music/stream?id=${track.id}`;
+  fetch(streamUrl).then(r => {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.blob();
+  }).then(blob => {
+    if (currentTrack !== track) return; // user switched tracks
+    const blobUrl = URL.createObjectURL(blob);
+    audio.oncanplay = () => {
+      setQuality("full", "● Full Song");
+      elPlayPause.disabled = false;
+      audio.oncanplay = null;
+    };
+    audio.onerror = () => {
+      setQuality("preview", "✕ Failed to load");
+      elPlayPause.disabled = false;
+      audio.onerror = null;
+      URL.revokeObjectURL(blobUrl);
+    };
+    audio.src = blobUrl;
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }).catch(() => {
+    setQuality("preview", "✕ Failed to load");
+    elPlayPause.disabled = false;
+  });
 
   elYtLink.textContent = "Open in SoundCloud";
   elYtLink.onclick = () => {
     const w = window.open("about:blank", "_blank");
     if (w) w.location.href = location.origin + "?q=" + encodeURIComponent(track.sourceUrl || "https://soundcloud.com");
   };
-
-  audio.oncanplay = () => {
-    setQuality("full", "● Full Song");
-    elPlayPause.disabled = false;
-    audio.oncanplay = null;
-  };
-  audio.onerror = () => {
-    setQuality("preview", "✕ Failed to load");
-    elPlayPause.disabled = false;
-    audio.onerror = null;
-  };
-
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
 }
 
 // ── Playback controls ─────────────────────────────────────────────────────────
