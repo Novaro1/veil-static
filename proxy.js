@@ -1,6 +1,6 @@
 "use strict";
 
-const BARE_SERVER = "https://veilub.mooo.com/bare/";
+const BARE_SERVER = "https://secure.brightpathlearning.website/bare/";
 const BASE = new URL("./", location.href).pathname; // e.g. /veil-static/ or /
 
 let scramjet   = null;

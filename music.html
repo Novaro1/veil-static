@@ -733,7 +733,7 @@ async function loadTrack(track) {
   audio.onerror = null;
 
   // Fetch audio as blob to avoid cross-origin <audio> restrictions
-  const streamUrl = `https://veilub.mooo.com/api/music/stream?id=${track.id}`;
+  const streamUrl = `https://secure.brightpathlearning.website/api/music/stream?id=${track.id}`;
   fetch(streamUrl).then(r => {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.blob();
@@ -801,10 +801,10 @@ async function triggerAutoplay() {
 
   try {
     const res = await fetch(
-      `https://veilub.mooo.com/api/music/related?sourceUrl=${encodeURIComponent(currentTrack.sourceUrl)}`
+      `https://secure.brightpathlearning.website/api/music/related?sourceUrl=${encodeURIComponent(currentTrack.sourceUrl)}`
     );
     const tracks = await res.json();
-    const _API2 = "https://veilub.mooo.com";
+    const _API2 = "https://secure.brightpathlearning.website";
     tracks.forEach(t => { if (t.artwork && t.artwork.startsWith("/")) t.artwork = _API2 + t.artwork; });
     let added = 0;
     tracks.forEach(t => {
@@ -1004,10 +1004,10 @@ async function doSearch(q) {
 
   let searchError = false;
   try {
-    const res  = await fetch(`https://veilub.mooo.com/api/music/search?q=${encodeURIComponent(q)}&limit=24`);
+    const res  = await fetch(`https://secure.brightpathlearning.website/api/music/search?q=${encodeURIComponent(q)}&limit=24`);
     results    = await res.json();
     // Fix relative artwork URLs for static site
-    const _API = "https://veilub.mooo.com";
+    const _API = "https://secure.brightpathlearning.website";
     results.forEach(t => { if (t.artwork && t.artwork.startsWith("/")) t.artwork = _API + t.artwork; });
   } catch {
     results = [];
