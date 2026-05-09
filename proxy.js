@@ -104,6 +104,7 @@ function setLoading(on) {
 let _lastUrl = "";
 setInterval(() => {
   if (!activeFrame || !frameContainer || frameContainer.style.display === "none") return;
+  if (urlBar && document.activeElement === urlBar) return; // don't clobber while user is typing
   try {
     const href   = activeFrame.frame.contentWindow.location.href;
     const prefix = location.origin + BASE + "sj/";
@@ -197,7 +198,7 @@ function openProxy(url) {
         if (href.startsWith(prefix)) {
           const decoded = decodeURIComponent(href.slice(prefix.length));
           _lastUrl = decoded;
-          if (urlBar) urlBar.value = decoded;
+          if (urlBar && document.activeElement !== urlBar) urlBar.value = decoded;
         }
       } catch {}
       if (btnBack)    btnBack.disabled    = false;
