@@ -88,7 +88,7 @@
       </header>
 
       <main>
-        <form id="sj-form">
+        <form id="sj-form" onsubmit="event.preventDefault();">
           <div class="search-bar">
             <input
               id="sj-address"
@@ -603,8 +603,8 @@
     })();
     </script>
 
-    <!-- static-compat MUST load first: sets up fetch override + stubs -->
-    <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/static-compat.js"></script>
+    <!-- static-compat MUST load first: sets up fetch override + stubs (local = always reliable) -->
+    <script src="static-compat.js"></script>
 
     <!-- Client-side JS — auto-syncs from full site via jsDelivr on every push -->
     <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/themes.js"></script>
@@ -627,8 +627,8 @@
     <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/ai-widget.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/share.js"></script>
 
-    <!-- proxy.js: our Scramjet navigation — replaces full site's index.js -->
-    <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/proxy.js"></script>
+    <!-- proxy.js: our Scramjet navigation — replaces full site's index.js (local = always reliable) -->
+    <script src="proxy.js"></script>
 
     <script>
       // Wire share button to veilShare (same as full site)
