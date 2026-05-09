@@ -1,246 +1,641 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Veil</title>
-  <link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236366f1'/%3E%3Cline x1='4' y1='21' x2='28' y2='21' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M8 26 L16 13 L24 26' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/style.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veil</title>
+    <!-- CSS auto-syncs from the full site via jsDelivr on every GitHub push -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/vars.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/index.css" />
+    <link rel="icon" id="favicon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236366f1'/%3E%3Cline x1='4' y1='21' x2='28' y2='21' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M8 26 L16 13 L24 26' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  </head>
+  <body>
 
-  <!-- Aurora background -->
-  <div class="aurora" aria-hidden="true">
-    <div class="aurora-blob b1"></div>
-    <div class="aurora-blob b2"></div>
-    <div class="aurora-blob b3"></div>
-    <div class="aurora-blob b4"></div>
-  </div>
-  <canvas id="veil-stars" aria-hidden="true"></canvas>
-  <div id="cursor-glow" aria-hidden="true"></div>
-
-  <!-- Home screen -->
-  <div class="home">
-
-    <!-- Settings gear -->
-    <button class="settings-gear" id="btn-settings" title="Settings" aria-label="Open settings">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-        <circle cx="9" cy="9" r="2.8" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.9 3.9l1.4 1.4M12.7 12.7l1.4 1.4M3.9 14.1l1.4-1.4M12.7 5.3l1.4-1.4"
-              stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-    </button>
-
-    <!-- Header -->
-    <header>
-      <div class="logo-wrap" aria-hidden="true">
-        <div class="logo-mark">
-          <svg class="logo-svg" viewBox="0 0 32 32" fill="none">
+    <!-- Splash / intro screen -->
+    <div id="splash" aria-hidden="true">
+      <div id="splash-content">
+        <div id="splash-logo-mark">
+          <svg width="38" height="38" viewBox="0 0 32 32" fill="none">
             <line x1="4" y1="21" x2="28" y2="21" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
             <path d="M8 26 L16 13 L24 26" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-      </div>
-      <h1>Veil</h1>
-      <p class="subtitle">The web, unveiled.</p>
-    </header>
-
-    <!-- Search card -->
-    <main>
-      <div id="proxy-status" class="proxy-status" style="display:none;"></div>
-      <form id="proxy-search-form" class="search-bar" autocomplete="off">
-        <input type="text" id="proxy-input" placeholder="Search or enter a URL..." autocomplete="off" spellcheck="false" />
-        <button type="submit">Go</button>
-      </form>
-      <div class="engine-row">
-        <span class="engine-label">Search with</span>
-        <div class="engine-chips">
-          <label class="chip"><input type="radio" name="engine" value="google" checked /><span>Google</span></label>
-          <label class="chip"><input type="radio" name="engine" value="bing" /><span>Bing</span></label>
-          <label class="chip"><input type="radio" name="engine" value="duckduckgo" /><span>DuckDuckGo</span></label>
+        <div id="splash-title">
+          <span>V</span><span>E</span><span>I</span><span>L</span>
         </div>
+        <div id="splash-sub">The web, unveiled.</div>
       </div>
-    </main>
+      <div id="splash-hint">Click or press any key to skip</div>
+      <div id="splash-progress"></div>
+    </div>
 
-    <!-- Quick access -->
-    <section class="quick-links">
-      <div class="ql-label">Quick Access</div>
-      <div class="ql-grid" id="ql-grid">
-        <div class="ql-tile" data-url="https://google.com"><div class="ql-tile-icon" style="background:#1a2740;color:#4285f4;font-size:1.1rem;font-weight:700;">G</div><div class="ql-tile-name">Google</div></div>
-        <div class="ql-tile" data-url="https://youtube.com"><div class="ql-tile-icon" style="background:#1f1215;color:#ef4444;font-size:1.1rem;font-weight:700;">▶</div><div class="ql-tile-name">YouTube</div></div>
-        <div class="ql-tile" data-url="https://discord.com/app"><div class="ql-tile-icon" style="background:#0e1628;color:#5865f2;font-size:1.1rem;font-weight:700;">D</div><div class="ql-tile-name">Discord</div></div>
-        <div class="ql-tile" data-url="https://reddit.com"><div class="ql-tile-icon" style="background:#1a1208;color:#ff6314;font-size:1.1rem;font-weight:700;">R</div><div class="ql-tile-name">Reddit</div></div>
-        <div class="ql-tile" data-url="https://spotify.com"><div class="ql-tile-icon" style="background:#121212;color:#1db954;font-size:1.1rem;font-weight:700;">♪</div><div class="ql-tile-name">Spotify</div></div>
-        <div class="ql-tile" data-url="https://wikipedia.org"><div class="ql-tile-icon" style="background:#111827;color:#e2e2f0;font-size:1.1rem;font-weight:700;">W</div><div class="ql-tile-name">Wikipedia</div></div>
-      </div>
-    </section>
+    <!-- Aurora background blobs -->
+    <div id="custom-bg" aria-hidden="true"></div>
+    <div class="aurora" aria-hidden="true">
+      <div class="aurora-blob b1"></div>
+      <div class="aurora-blob b2"></div>
+      <div class="aurora-blob b3"></div>
+      <div class="aurora-blob b4"></div>
+    </div>
 
-    <!-- Games section — fully active -->
-    <section class="games-section" id="games-section">
-      <div class="gs-header">
-        <div class="ql-label" style="margin:0">Games</div>
-        <div class="gs-header-right">
-          <input type="text" id="gs-search" class="gs-search" placeholder="Search…" autocomplete="off" spellcheck="false" />
-          <button class="gs-icon-btn gs-toggle" id="gs-toggle" title="Collapse games">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="gs-grid" id="gs-grid"></div>
-      <div class="gs-no-results" id="gs-no-results" style="display:none">No games found.</div>
-    </section>
+    <!-- Interactive starfield canvas -->
+    <canvas id="veil-stars" aria-hidden="true"></canvas>
 
-    <footer>
-      <p><a href="./">Launcher</a> &middot; Powered by <a href="https://github.com/MercuryWorkshop/scramjet" target="_blank" rel="noopener">Scramjet</a> &middot; <a href="https://discord.gg/NScKEHkd6U" target="_blank">Discord</a></p>
-    </footer>
+    <!-- Cursor glow orb -->
+    <div id="cursor-glow" aria-hidden="true"></div>
 
-  </div><!-- .home -->
+    <!-- Warp flash overlay -->
+    <div id="warp-flash" aria-hidden="true"></div>
 
-  <!-- Proxy browser overlay -->
-  <div id="proxy-overlay">
-    <div id="proxy-bar">
-      <div id="proxy-load-bar"></div>
-      <div class="proxy-nav-btns">
-        <button id="proxy-back" title="Back">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button id="proxy-forward" title="Forward">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button id="proxy-reload" title="Reload">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7a5 5 0 1 0 1-3H1m2-2v3H0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <form id="proxy-url-form" autocomplete="off">
-        <input id="proxy-url-bar" type="text" spellcheck="false" autocomplete="off" placeholder="Search or enter URL…" />
-      </form>
-      <button id="proxy-close" title="Close">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <!-- Home screen -->
+    <div class="home">
+
+      <!-- History button -->
+      <button class="history-home-btn" id="btn-history-home" title="History" aria-label="Open history">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M8 5v3.5l2.5 1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
-    </div>
-    <iframe id="proxy-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups allow-modals" allowfullscreen></iframe>
-  </div>
 
-  <!-- Settings overlay + panel -->
-  <div id="settings-overlay" aria-hidden="true"></div>
-  <div id="settings-panel" role="dialog" aria-label="Settings" aria-hidden="true">
-    <div class="settings-header">
-      <span class="settings-title">Settings</span>
-      <button class="settings-close" id="btn-settings-close" aria-label="Close">&times;</button>
-    </div>
-    <div class="settings-body">
+      <!-- Ambassador star -->
+      <div id="ambassador-home-star" style="display:none;" title="Ambassador">
+        <svg class="icon icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </div>
 
-      <!-- Tab Cloak -->
-      <section class="settings-section">
-        <div class="settings-section-title">Tab Cloak</div>
-        <p class="settings-section-desc">Disguise this tab from onlookers.</p>
-        <div class="settings-row">
-          <label class="settings-label" for="cloak-preset">Preset</label>
-          <select id="cloak-preset" class="settings-select">
-            <option value="none">None (Veil)</option>
-            <option value="classroom">Google Classroom</option>
-            <option value="docs">Google Docs</option>
-            <option value="slides">Google Slides</option>
-            <option value="khan">Khan Academy</option>
-            <option value="desmos">Desmos</option>
-          </select>
-        </div>
-      </section>
+      <!-- Settings gear -->
+      <button class="settings-gear" id="btn-settings-home" title="Settings" aria-label="Open settings">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="2.8" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.9 3.9l1.4 1.4M12.7 12.7l1.4 1.4M3.9 14.1l1.4-1.4M12.7 5.3l1.4-1.4"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
 
-      <!-- Panic Key -->
-      <section class="settings-section">
-        <div class="settings-section-title">Panic Key</div>
-        <p class="settings-section-desc">Press <kbd>Alt+X</kbd> to instantly redirect away.</p>
-        <div class="settings-row">
-          <label class="settings-label" for="panic-url">Navigate to</label>
-          <select id="panic-url" class="settings-select">
-            <option value="classroom">Google Classroom</option>
-            <option value="google">Google</option>
-            <option value="desmos">Desmos</option>
-            <option value="gmail">Gmail</option>
-            <option value="khan">Khan Academy</option>
-          </select>
-        </div>
-      </section>
-
-      <!-- Appearance -->
-      <section class="settings-section">
-        <div class="settings-section-title">Appearance</div>
-        <div class="settings-row">
-          <span class="settings-label">CRT Scanlines</span>
-          <label class="toggle">
-            <input type="checkbox" id="fx-scanlines" checked />
-            <span class="toggle-track"></span>
-          </label>
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">Edge Darkening</span>
-          <label class="toggle">
-            <input type="checkbox" id="fx-vignette" checked />
-            <span class="toggle-track"></span>
-          </label>
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">Lag Reduction</span>
-          <label class="toggle">
-            <input type="checkbox" id="perf-mode-toggle" />
-            <span class="toggle-track"></span>
-          </label>
-        </div>
-      </section>
-
-      <!-- Proxy-only features -->
-      <section class="settings-section">
-        <div class="settings-section-title" style="opacity:0.4">Proxy Features</div>
-        <p class="settings-section-desc">These require the full Veil proxy.</p>
-        <div class="proxy-disabled" aria-hidden="true">
-          <div class="settings-row">
-            <span class="settings-label">Save History</span>
-            <label class="toggle"><input type="checkbox" disabled /><span class="toggle-track"></span></label>
-          </div>
-          <div class="settings-row">
-            <span class="settings-label">Bookmarks</span>
-            <label class="toggle"><input type="checkbox" disabled /><span class="toggle-track"></span></label>
-          </div>
-          <div class="settings-row">
-            <span class="settings-label">Custom Theme</span>
-            <label class="toggle"><input type="checkbox" disabled /><span class="toggle-track"></span></label>
+      <header>
+        <div class="logo-wrap" aria-hidden="true">
+          <div class="logo-mark">
+            <svg class="logo-svg" viewBox="0 0 32 32" fill="none">
+              <line x1="4" y1="21" x2="28" y2="21" stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M8 26 L16 13 L24 26" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </div>
-        <div style="margin-top:0.75rem;">
-          <a href="https://secure.brightpathlearning.website" target="_blank" class="settings-btn-link">Get Full Proxy →</a>
+        <h1>Veil</h1>
+        <p class="subtitle">The web, unveiled.</p>
+      </header>
+
+      <main>
+        <form id="sj-form">
+          <div class="search-bar">
+            <input
+              id="sj-address"
+              type="text"
+              placeholder="Search or enter a URL..."
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+            />
+            <button type="submit" id="sj-submit-btn">
+              <span id="sj-btn-label">Go</span>
+              <span id="sj-btn-spinner" class="spinner" style="display:none;"></span>
+            </button>
+          </div>
+
+          <div class="engine-row">
+            <span class="engine-label">Search with</span>
+            <div class="engine-chips">
+              <label class="chip">
+                <input type="radio" name="engine" value="https://www.google.com/search?q=%s" checked />
+                <span>Google</span>
+              </label>
+              <label class="chip">
+                <input type="radio" name="engine" value="https://www.bing.com/search?q=%s" />
+                <span>Bing</span>
+              </label>
+              <label class="chip">
+                <input type="radio" name="engine" value="https://duckduckgo.com/?q=%s" />
+                <span>DuckDuckGo</span>
+              </label>
+            </div>
+          </div>
+
+          <input id="sj-search-engine" type="hidden" value="https://www.google.com/search?q=%s" />
+        </form>
+
+        <div id="error-container" style="display:none;">
+          <p id="sj-error"></p>
+          <pre id="sj-error-code"></pre>
         </div>
+      </main>
+
+      <!-- Quick access tiles -->
+      <section class="quick-links" id="quick-access">
+        <div class="ql-label">Quick Access</div>
+        <div class="ql-grid" id="ql-grid"></div>
       </section>
 
-    </div>
-  </div>
+      <!-- Games section -->
+      <section class="games-section" id="games-section">
+        <div class="gs-header">
+          <div class="ql-label" style="margin:0;">Games</div>
+          <div class="gs-header-btns">
+            <button class="gs-icon-btn gs-toggle" id="gs-toggle" title="Collapse games" aria-label="Toggle games">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="gs-grid" id="gs-grid"></div>
+      </section>
 
-  <!-- Game overlay -->
-  <div class="game-overlay" id="gameOverlay">
-    <div class="game-bar">
-      <span class="game-bar-title" id="gameBarTitle">Game</span>
-      <div class="game-bar-actions">
-        <button id="fullscreenBtn" title="Fullscreen">
-          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-            <path d="M1 4V1h3M10 1h3v3M13 10v3h-3M4 13H1v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Discord community banner -->
+      <section class="community-banner" id="community-banner">
+        <div class="community-banner-inner">
+          <svg class="community-banner-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
           </svg>
-        </button>
-        <button id="closeGame" title="Close">
-          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <div class="community-banner-text">
+            <div class="community-banner-title">Join the Veil Discord</div>
+            <div class="community-banner-sub">Get links, updates &amp; exclusive ambassador perks</div>
+          </div>
+          <a class="community-banner-btn" href="https://discord.gg/NScKEHkd6U" target="_blank" rel="noopener">Join Server</a>
+        </div>
+      </section>
+
+      <!-- AI banner -->
+      <section class="community-banner" id="ai-banner">
+        <div class="community-banner-inner">
+          <svg class="community-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/>
+            <path d="M8 12h4M12 8v8"/>
+            <circle cx="16" cy="12" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          <div class="community-banner-text">
+            <div class="community-banner-title">Veil AI</div>
+            <div class="community-banner-sub">Ask anything — homework help, code, explanations &amp; more</div>
+          </div>
+          <a class="community-banner-btn" href="ai.html" style="background:var(--accent,#6366f1)">Try AI</a>
+        </div>
+      </section>
+
+      <!-- Partners -->
+      <section class="partners-section" id="partners-section">
+        <div class="partners-header">Partners</div>
+        <div class="partners-grid" id="partners-grid">
+          <a class="partner-tile" href="https://discord.gg/kVXbPPzNWD" target="_blank" rel="noopener">
+            <img src="https://secure.brightpathlearning.website/ink-network-logo.png" alt="Ink Network" class="partner-logo">
+            <div class="partner-info">
+              <span class="partner-name">Ink Network</span>
+              <span class="partner-desc">Games, proxies, anime, manga &amp; more</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <footer>
+        <p>Powered by <a href="https://github.com/MercuryWorkshop/scramjet" target="_blank">Scramjet</a> &nbsp;·&nbsp; <button id="btn-report-bug" class="footer-report-btn">Report a Bug</button></p>
+      </footer>
+
+      <!-- Page navigation -->
+      <nav class="page-nav">
+        <a class="page-nav-link active" href="go.html">home</a>
+        <a class="page-nav-link" href="music.html">music</a>
+        <a class="page-nav-link" href="ai.html">ai</a>
+        <a class="page-nav-link" href="https://secure.brightpathlearning.website/remote.html" target="_blank" title="Use full site for Remote Desktop">remote</a>
+      </nav>
+    </div><!-- .home -->
+
+    <!-- Browser chrome — shown when a site is loaded -->
+    <div id="sj-frame-container" style="display:none;">
+
+      <!-- Tab bar (hidden on static — single tab only) -->
+      <div id="tab-bar" style="display:none;">
+        <button id="btn-new-tab" title="New tab" aria-label="New tab">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+            <path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
         </button>
       </div>
-    </div>
-    <iframe id="gameFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups" allowfullscreen></iframe>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/stars.js"></script>
-  <script src="scramjet/scramjet.all.js"></script>
-  <script src="baremux/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/proxy.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/app.js"></script>
-</body>
+      <div class="toolbar">
+        <button class="toolbar-btn" id="btn-back" title="Back" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="btn-forward" title="Forward" disabled>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="btn-reload" title="Reload">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M13.5 8A5.5 5.5 0 1 1 10.75 3.25" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M11.9 3.85 L10.75 3.25 L10.1 4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="url-bar-wrap">
+          <input id="sj-url-bar" type="text" spellcheck="false" autocomplete="off"
+                 autocorrect="off" autocapitalize="off" placeholder="Enter a URL..." />
+          <div id="sj-load-bar"></div>
+        </div>
+        <button class="toolbar-btn" id="btn-home" title="Home">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 7L8 2L14 7V14H10V10H6V14H2V7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="toolbar-btn" id="btn-history" title="History">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <circle cx="7.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7.5 4.5v3.2l2 1.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="toolbar-sep" aria-hidden="true"></div>
+
+        <button class="toolbar-btn" id="btn-bookmark" title="Bookmark this page">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <path d="M3 2h9a1 1 0 0 1 1 1v10l-5.5-3L2 13V3a1 1 0 0 1 1-1Z"
+                  stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" class="bm-path"/>
+          </svg>
+        </button>
+
+        <button class="toolbar-btn" id="btn-copy-url" title="Copy URL">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <rect x="5" y="1" width="9" height="11" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M1 4h3.5V14H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="toolbar-btn" id="btn-share-url" title="Share this site">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </button>
+
+        <button class="toolbar-btn" id="btn-fullscreen" title="Fullscreen">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <path class="fs-expand" d="M2 5V2h3M10 2h3v3M13 10v3h-3M5 13H2v-3"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="fs-contract" style="display:none"
+                  d="M5 2v3H2M13 5h-3V2M10 13v-3h3M2 10h3v3"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <div class="toolbar-sep" aria-hidden="true"></div>
+
+        <button class="toolbar-btn" id="btn-settings-toolbar" title="Settings" aria-label="Open settings">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <circle cx="7.5" cy="7.5" r="2.2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7.5 1v1.5M7.5 12.5V14M1 7.5h1.5M12.5 7.5H14M3.2 3.2l1.1 1.1M10.7 10.7l1.1 1.1M3.2 11.8l1.1-1.1M10.7 4.3l1.1-1.1"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tab frames go here (single frame for static) -->
+      <div id="tab-frame-area"></div>
+    </div>
+
+    <!-- History panel -->
+    <div id="history-overlay" aria-hidden="true"></div>
+    <div id="history-panel" role="dialog" aria-label="History" aria-hidden="true">
+      <div class="settings-header">
+        <span class="settings-title">History</span>
+        <button class="settings-close" id="history-close" aria-label="Close history">&times;</button>
+      </div>
+      <div class="history-search-wrap">
+        <input type="text" id="history-search" placeholder="Search history…" autocomplete="off" spellcheck="false" />
+      </div>
+      <div id="history-list"></div>
+      <div class="history-footer">
+        <button id="history-clear-all">Clear All History</button>
+      </div>
+    </div>
+
+    <!-- Settings modal -->
+    <div id="settings-overlay" aria-hidden="true"></div>
+    <div id="settings-panel" role="dialog" aria-label="Settings" aria-hidden="true">
+      <div class="settings-header">
+        <span class="settings-title">Settings</span>
+        <button class="settings-close" id="btn-settings-close" aria-label="Close settings">&times;</button>
+      </div>
+
+      <div class="settings-body">
+
+        <!-- Tab Cloak -->
+        <section class="settings-section">
+          <div class="settings-section-title">Tab Cloak</div>
+          <p class="settings-section-desc">Disguise this tab from onlookers.</p>
+          <div class="settings-row">
+            <label class="settings-label" for="cloak-preset">Preset</label>
+            <select id="cloak-preset" class="settings-select">
+              <option value="none">None</option>
+              <option value="docs">Google Docs</option>
+              <option value="classroom">Google Classroom</option>
+              <option value="gmail">Gmail</option>
+              <option value="desmos">Desmos</option>
+              <option value="khan">Khan Academy</option>
+              <option value="custom">Custom…</option>
+              <option value="youtube">YouTube</option>
+              <option value="spotify">Spotify</option>
+              <option value="discord">Discord</option>
+              <option value="roblox">Roblox</option>
+            </select>
+          </div>
+          <div class="settings-row" id="cloak-custom-row" style="display:none;">
+            <label class="settings-label" for="cloak-custom-title">Tab title</label>
+            <input type="text" id="cloak-custom-title" class="settings-input" placeholder="e.g. Google Docs" />
+          </div>
+          <div class="settings-row" id="cloak-favicon-row" style="display:none;">
+            <label class="settings-label" for="cloak-custom-favicon">Favicon URL</label>
+            <input type="text" id="cloak-custom-favicon" class="settings-input" placeholder="https://…/favicon.ico" />
+          </div>
+        </section>
+
+        <!-- Panic Key -->
+        <section class="settings-section">
+          <div class="settings-section-title">Panic Key</div>
+          <p class="settings-section-desc">Instantly navigate away. Works when this page is focused — click the URL bar first if browsing a site.</p>
+          <div class="settings-row">
+            <span class="settings-label">Enable</span>
+            <label class="toggle"><input type="checkbox" id="panic-enabled" checked /><span class="toggle-track"></span></label>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Key combo</span>
+            <button id="panic-key-capture" class="panic-key-display" type="button">Alt + X</button>
+          </div>
+          <div class="settings-row">
+            <label class="settings-label" for="panic-url-select">Navigate to</label>
+            <select id="panic-url-select" class="settings-select">
+              <option value="classroom">Google Classroom</option>
+              <option value="docs">Google Docs</option>
+              <option value="gmail">Gmail</option>
+              <option value="desmos">Desmos</option>
+              <option value="khan">Khan Academy</option>
+              <option value="custom">Custom…</option>
+            </select>
+          </div>
+          <div class="settings-row" id="panic-url-custom-row" style="display:none;">
+            <label class="settings-label" for="panic-url-custom">URL</label>
+            <input type="url" id="panic-url-custom" class="settings-input" placeholder="https://…" />
+          </div>
+          <div class="settings-row">
+            <label class="settings-label" for="panic-mode-select">Behavior</label>
+            <select id="panic-mode-select" class="settings-select">
+              <option value="stealth">Stealth Overlay</option>
+              <option value="escape">Close / Navigate Away</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- about:blank Cloak -->
+        <section class="settings-section">
+          <div class="settings-section-title">about:blank Cloak</div>
+          <p class="settings-section-desc">Opens Veil inside an about:blank tab so the URL bar shows nothing suspicious.</p>
+          <div class="settings-row">
+            <span class="settings-label">Open now</span>
+            <button class="settings-btn" id="blank-cloak-btn">Open</button>
+          </div>
+          <div class="settings-row">
+            <span class="settings-label">Auto-open on load</span>
+            <label class="toggle"><input type="checkbox" id="blank-cloak-auto" /><span class="toggle-track"></span></label>
+          </div>
+        </section>
+
+        <!-- Appearance -->
+        <section class="settings-section">
+          <div class="settings-section-title">Appearance</div>
+          <div class="settings-row settings-row--col">
+            <span class="settings-label">Theme</span>
+            <div class="theme-grid" id="theme-picker">
+              <button class="theme-swatch active" data-theme="veil"    title="Veil"></button>
+              <button class="theme-swatch"        data-theme="ember"   title="Ember"></button>
+              <button class="theme-swatch"        data-theme="emerald" title="Emerald"></button>
+              <button class="theme-swatch"        data-theme="rose"    title="Rose"></button>
+              <button class="theme-swatch"        data-theme="ocean"   title="Ocean"></button>
+              <button class="theme-swatch"        data-theme="void"    title="Void"></button>
+              <button class="theme-swatch"        data-theme="chrome"  title="Chrome"></button>
+              <button class="theme-swatch theme-swatch--locked" data-theme="aura"    id="aura-swatch"    title="Aura (Ambassador only)"    disabled><svg class="icon icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+              <button class="theme-swatch theme-swatch--locked" data-theme="crimson" id="crimson-swatch" title="Crimson (Ambassador only)" disabled><svg class="icon icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+              <button class="theme-swatch theme-swatch--locked" data-theme="gold"    id="gold-swatch"    title="Gold (Ambassador only)"    disabled><svg class="icon icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+            </div>
+          </div>
+          <div class="settings-row"><span class="settings-label">Starfield</span><label class="toggle"><input type="checkbox" id="fx-stars" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">Aurora</span><label class="toggle"><input type="checkbox" id="fx-aurora" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">CRT Scanlines</span><label class="toggle"><input type="checkbox" id="fx-scanlines" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">Cursor Glow</span><label class="toggle"><input type="checkbox" id="fx-cursor" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">Edge Darkening</span><label class="toggle"><input type="checkbox" id="fx-vignette" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">Lag Reduction</span><label class="toggle"><input type="checkbox" id="perf-mode-toggle" /><span class="toggle-track"></span></label></div>
+          <div class="settings-row"><span class="settings-label">Screen Blur on Idle</span><label class="toggle"><input type="checkbox" id="idle-blur-toggle" /><span class="toggle-track"></span></label></div>
+          <div class="settings-row" id="idle-blur-delay-row">
+            <label class="settings-label" for="idle-blur-delay">Blur after</label>
+            <select id="idle-blur-delay" class="settings-select">
+              <option value="10">10 seconds</option>
+              <option value="20">20 seconds</option>
+              <option value="30" selected>30 seconds</option>
+              <option value="45">45 seconds</option>
+              <option value="60">1 minute</option>
+              <option value="120">2 minutes</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Background -->
+        <section class="settings-section">
+          <div class="settings-section-title">Background</div>
+          <p class="settings-section-desc">Custom home screen background. Aurora &amp; stars layer on top.</p>
+          <div class="settings-row settings-row--col">
+            <span class="settings-label">Image URL</span>
+            <input type="text" id="bg-url" class="settings-input bg-url-input" placeholder="https://…/image.jpg or .gif" />
+          </div>
+          <div class="settings-row settings-row--col">
+            <span class="settings-label">Gradient</span>
+            <div class="bg-gradient-grid" id="bg-gradient-picker">
+              <button class="bg-swatch active" data-gradient=""       title="None">×</button>
+              <button class="bg-swatch"        data-gradient="sunset" title="Sunset"></button>
+              <button class="bg-swatch"        data-gradient="cosmos" title="Cosmos"></button>
+              <button class="bg-swatch"        data-gradient="forest" title="Forest"></button>
+              <button class="bg-swatch"        data-gradient="ocean"  title="Ocean"></button>
+              <button class="bg-swatch"        data-gradient="dusk"   title="Dusk"></button>
+              <button class="bg-swatch bg-swatch--locked" data-gradient="blaze" id="grad-blaze" title="Blaze (Ambassador only)" disabled><svg class="icon icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+              <button class="bg-swatch bg-swatch--locked" data-gradient="neon"  id="grad-neon"  title="Neon (Ambassador only)"  disabled><svg class="icon icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Ambassador -->
+        <section class="settings-section">
+          <div class="settings-section-title">Ambassador</div>
+          <p class="settings-section-desc">Advertise Veil in Discord and get approved by staff to unlock exclusive features.</p>
+          <div id="ambassador-verified" style="display:none;">
+            <div class="ambassador-badge"><svg class="icon icon-star" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Ambassador — <span id="ambassador-name"></span></div>
+          </div>
+          <div id="ambassador-form">
+            <div class="settings-row settings-row--col">
+              <span class="settings-label">Token</span>
+              <div class="ambassador-input-row">
+                <input type="text" id="ambassador-token-input" class="settings-input" placeholder="Paste your token here" autocomplete="off" spellcheck="false" />
+                <button class="settings-btn" id="ambassador-redeem-btn">Redeem</button>
+              </div>
+            </div>
+            <p id="ambassador-error" class="ambassador-error" style="display:none;"></p>
+          </div>
+          <div class="settings-row settings-row--actions" id="ambassador-revoke-row" style="display:none;">
+            <button class="settings-btn" id="ambassador-copy-link-btn">Copy Login Link</button>
+            <button class="settings-btn-danger" id="ambassador-revoke-btn">Remove Token</button>
+          </div>
+          <div class="settings-row settings-row--col" style="margin-top:0.75rem;">
+            <span class="settings-label">Top Ambassadors</span>
+            <div id="leaderboard-list" class="leaderboard-list"></div>
+          </div>
+        </section>
+
+        <!-- Security -->
+        <section class="settings-section">
+          <div class="settings-section-title">Security</div>
+          <p class="settings-section-desc">Protection against admins and monitoring software on Windows &amp; Mac.</p>
+          <div class="settings-row"><span class="settings-label">Stealth Entry</span><label class="toggle"><input type="checkbox" id="stealth-entry-toggle" checked /><span class="toggle-track"></span></label></div>
+          <p class="settings-section-desc" style="margin-top:-0.3rem;">Opens Veil inside a hidden about:blank window, redirecting this tab to your cloaked site so the URL is invisible.</p>
+          <div class="settings-row"><span class="settings-label">Block DevTools</span><label class="toggle"><input type="checkbox" id="block-devtools-toggle" checked /><span class="toggle-track"></span></label></div>
+          <p class="settings-section-desc" style="margin-top:-0.3rem;">Disables F12, Ctrl+Shift+I, and View Source shortcuts so admins can't inspect the page.</p>
+          <div class="settings-row"><span class="settings-label">Tab-Switch Cloak</span><label class="toggle"><input type="checkbox" id="tab-switch-cloak-toggle" checked /><span class="toggle-track"></span></label></div>
+          <p class="settings-section-desc" style="margin-top:-0.3rem;">Instantly shows your panic cloak when you switch tabs or windows.</p>
+          <div class="settings-row"><span class="settings-label">Poison History</span><label class="toggle"><input type="checkbox" id="poison-history-toggle" checked /><span class="toggle-track"></span></label></div>
+          <p class="settings-section-desc" style="margin-top:-0.3rem;">Replaces Veil URLs in browser history with Google Classroom so teachers can't spot them.</p>
+          <div class="settings-row">
+            <label class="settings-label" for="auto-poison-delay">Auto-Cloak on Idle</label>
+            <select id="auto-poison-delay" class="settings-select">
+              <option value="0">Off</option>
+              <option value="2">2 minutes</option>
+              <option value="5" selected>5 minutes</option>
+              <option value="10">10 minutes</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Privacy -->
+        <section class="settings-section">
+          <div class="settings-section-title">Privacy</div>
+          <div class="settings-row"><span class="settings-label">Save History</span><label class="toggle"><input type="checkbox" id="priv-history" checked /><span class="toggle-track"></span></label></div>
+          <div class="settings-row settings-row--actions">
+            <button class="settings-btn-danger" id="btn-clear-history">Clear History</button>
+            <button class="settings-btn-danger" id="btn-clear-bookmarks">Clear Bookmarks</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Idle blur overlay -->
+    <div id="idle-blur-overlay" aria-hidden="true"></div>
+
+    <!-- Panic / stealth overlay -->
+    <div id="panic-overlay" style="display:none;"></div>
+
+    <!-- Bug report FAB -->
+    <button id="bug-fab" aria-label="Report a bug" title="Report a bug or suggestion">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span>Report a Bug</span>
+    </button>
+
+    <!-- Bug report modal -->
+    <div id="report-overlay"></div>
+    <div id="report-panel" role="dialog" aria-label="Report a Bug">
+      <div class="settings-header">
+        <span class="settings-title">Report a Bug</span>
+        <button class="settings-close" id="report-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="settings-body">
+        <section class="settings-section">
+          <div class="settings-row settings-row--col">
+            <label class="settings-label" for="report-type">Type</label>
+            <select id="report-type" class="settings-select">
+              <option value="bug">Bug</option>
+              <option value="broken-site">Broken Site</option>
+              <option value="suggestion">Suggestion</option>
+            </select>
+          </div>
+          <div class="settings-row settings-row--col">
+            <label class="settings-label" for="report-desc">Description</label>
+            <textarea id="report-desc" class="settings-input" rows="5" placeholder="Describe the issue in detail…"></textarea>
+          </div>
+          <div class="settings-row settings-row--actions">
+            <button id="report-submit-btn">
+              <span id="report-btn-label">Submit</span>
+              <span id="report-btn-spinner" class="spinner" style="display:none;"></span>
+            </button>
+          </div>
+          <p id="report-status" style="display:none;margin-top:0.5rem;font-size:0.8rem;text-align:center;"></p>
+        </section>
+      </div>
+    </div>
+
+    <!-- Hold-Escape teacher panic (pure client-side, works on static) -->
+    <div id="poison-overlay" style="display:none;position:fixed;inset:0;z-index:99999;background:#f1f3f4;font-family:'Google Sans',Roboto,Arial,sans-serif;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+      <div style="width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#0f9d58;border-radius:50%;animation:pspin 0.8s linear infinite;"></div>
+      <div style="font-size:15px;color:#202124;font-weight:500;">Redirecting to Google Classroom…</div>
+      <style>@keyframes pspin{to{transform:rotate(360deg)}}</style>
+    </div>
+    <script>
+    (function(){
+      var holdTimer = null;
+      document.addEventListener("keydown", function(e){
+        if (e.key !== "Escape") return;
+        if (holdTimer) return;
+        holdTimer = setTimeout(function(){
+          var o = document.getElementById("poison-overlay");
+          o.style.display = "flex";
+          setTimeout(function(){ window.location.replace("https://classroom.google.com"); }, 1500);
+        }, 2000);
+      }, true);
+      document.addEventListener("keyup", function(e){
+        if (e.key !== "Escape") return;
+        if (holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
+      }, true);
+    })();
+    </script>
+
+    <!-- static-compat MUST load first: sets up fetch override + stubs -->
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/static-compat.js"></script>
+
+    <!-- Client-side JS — auto-syncs from full site via jsDelivr on every push -->
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/themes.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/history.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/panic.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/splash.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/autocomplete.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/search.js"></script>
+
+    <!-- Scramjet + BareMux must be local (service worker same-origin requirement) -->
+    <script src="scramjet/scramjet.all.js"></script>
+    <script src="baremux/index.js"></script>
+
+    <!-- More client-side JS — auto-syncs from full site -->
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/fx.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/shortcuts.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/games.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/settings.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/blank-cloak.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/ai-widget.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/unblocker@main/public/share.js"></script>
+
+    <!-- proxy.js: our Scramjet navigation — replaces full site's index.js -->
+    <script src="https://cdn.jsdelivr.net/gh/Novaro1/veil-static@main/proxy.js"></script>
+
+    <script>
+      // Wire share button to veilShare (same as full site)
+      document.getElementById("btn-share-url")?.addEventListener("click", function () {
+        const url = document.getElementById("sj-url-bar")?.value;
+        if (url && window.veilShare) window.veilShare("site", { url });
+      });
+    </script>
+  </body>
 </html>
